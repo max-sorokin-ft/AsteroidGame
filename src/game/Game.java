@@ -46,4 +46,7 @@ abstract class Game extends Canvas {
   private void sleep(int time) {
     try {Thread.sleep(time);} catch(Exception exc){};
   }
+  
+  public int getWidth() {return width;}
+  public int getHeight() {return height;}
 }
