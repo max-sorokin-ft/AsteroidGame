@@ -9,30 +9,52 @@ NOTE: This class is the metaphorical "main method" of your program,
 */
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 class Asteroids extends Game {
-	static int counter = 0;
+	public static int frame = 0;
+	private ArrayList<Explosion> explosions;
 
   public Asteroids() {
-    super("YourGameName!",800,600);
+    super("Asteroids",800,600);
     this.setFocusable(true);
 	this.requestFocus();
+	explosions = new ArrayList<Explosion>();
   }
   
-	public void paint(Graphics brush) {
-    	brush.setColor(Color.black);
-    	brush.fillRect(0,0,width,height);
-    	
-    	// sample code for printing message for debugging
-    	// counter is incremented and this message printed
-    	// each time the canvas is repainted
-    	counter++;
-    	brush.setColor(Color.white);
-    	brush.drawString("Counter is " + counter,10,10);
-  }
-  
-	public static void main (String[] args) {
-   		Asteroids a = new Asteroids();
+  public static void main (String[] args) {
+ 		Asteroids a = new Asteroids();
 		a.repaint();
   }
+  
+  public void paint(Graphics brush) {
+    	brush.setColor(Color.black);
+    	brush.fillRect(0,0,width,height);
+    	frame++;
+    	
+
+    	explosionUpdates(brush);
+    	
+    	brush.setColor(Color.white);
+    	brush.drawString("Frame: " + frame,10,10);
+  }
+  
+	
+	
+	
+	
+	private void explosionUpdates(Graphics brush) {
+		for(Explosion e: explosions) {
+			if(e.getDeathFrame() < frame) {
+				e = null;
+			} else {
+			e.update();
+			e.draw(brush);
+			}
+		}
+	}
+	
+	public void addExplosion(Explosion e) {
+		explosions.add(e);
+	}
 }
