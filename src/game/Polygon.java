@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Graphics;
+
 /*
 CLASS: Polygon
 DESCRIPTION: A polygon is a sequence of points in space defined by a set of
@@ -48,10 +50,10 @@ class Polygon {
       Point p = shape[i];
       double x = ((p.x-center.x) * Math.cos(Math.toRadians(rotation)))
                - ((p.y-center.y) * Math.sin(Math.toRadians(rotation)))
-               + center.x + position.x;
+               + center.x/2 + position.x;
       double y = ((p.x-center.x) * Math.sin(Math.toRadians(rotation)))
                + ((p.y-center.y) * Math.cos(Math.toRadians(rotation)))
-               + center.y + position.y;
+               + center.y/2 + position.y;
       points[i] = new Point(x,y);
     }
     return points;
@@ -71,6 +73,24 @@ class Polygon {
     }
     return crossingNumber%2 == 1;
   }
+  
+  public void drawPolygon(Graphics brush) {
+	  for(int i = 0; i < shape.length-1; i++) {
+		 brush.drawLine(
+				 (int)(shape[i].getX()+this.position.getX()), 
+				 (int)(shape[i].getY()+this.position.getY()),
+				 (int)(shape[i+1].getX()+this.position.getX()),
+				 (int)(shape[i+1].getY()+this.position.getY())); 
+	  }
+	  brush.drawLine(
+				 (int)(shape[shape.length-1].getX()+this.position.getX()), 
+				 (int)(shape[shape.length-1].getY()+this.position.getY()),
+				 (int)(shape[0].getX()+this.position.getX()),
+				 (int)(shape[0].getY()+this.position.getY())); 
+	  }
+ 
+  
+  
   
   public void rotate(int degrees) {rotation = (rotation+degrees)%360;}
   
