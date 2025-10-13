@@ -11,6 +11,7 @@ public class AsteroidField implements Updatable, Drawable{
 	private ArrayList<Asteroid> asteroids;
 	Random random = new Random();
 	private Asteroids gameReference;
+	private ArrayList<Polygon> delete = new ArrayList<Polygon>();
 	
 	Point[][] shapes = {{
 		new Point(9, -8),
@@ -125,26 +126,37 @@ public class AsteroidField implements Updatable, Drawable{
 	}
 	
 	public void collidingAsteroids() {
-		ArrayList<Polygon> delete = new ArrayList<Polygon>();
 		for(Polygon p: asteroids) {
-			for(Polygon a: asteroids) {
-				if(a==p){continue;}
-				if(Utilities.isColliding(a, p)){
-					gameReference.newExplosion(Utilities.averagePosition(a, p));
-					delete.add(a);
-					delete.add(p);
-				}
-				
+			if(isCollidingAsteroid(p)) {
+				delete.add(p);
 			}
+		}
+		cleanup();
+	}
+	
+	public boolean isCollidingAsteroid(Polygon thing) {
+		for(Polygon a: asteroids) {
+			if(a==thing){continue;}
+			if(Utilities.isColliding(a, thing)){
+				gameReference.newExplosion(Utilities.averagePosition(a, thing));
+				delete.add(a);
+				return true;
+			}
+				
 		
 		}
+		return false;
+	}
+	
+	private void cleanup() {
 		for(Polygon p: delete) {
 			asteroids.remove(p);
 			if(((Asteroid)p).scale > 1.5) {
 			splitAsteroid(p.position);
+			splitAsteroid(p.position);
 			}
 		}
-		
+		delete.clear();
 	}
 	
 }
