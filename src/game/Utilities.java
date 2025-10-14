@@ -11,8 +11,8 @@ public class Utilities {
 	
 	public static Point updatePosition(Point position, double angle, double velocity) {
 		Point newPos = new Point(0,0);
-		newPos.setX(position.getX()+velocity*Math.cos(angle));
-		newPos.setY(position.getY()+velocity*Math.sin(angle));
+		newPos.setX(position.getX()+velocity*Math.cos(Math.toRadians(angle)));
+		newPos.setY(position.getY()+velocity*Math.sin(Math.toRadians(angle)));
 		return newPos;
 	}
 	
