@@ -117,12 +117,11 @@ public class Ship extends Polygon implements Updatable, Drawable {
     private void shoot() {
         double bulletSpeed = 8;
         double angle = rotation - 90;
-        System.out.println(rotation - 90);
         
         // Calculate bullet starting position at the tip/top of the ship.
         Point bulletStart = new Point(
-            position.getX() + 0 * Math.cos(Math.toRadians(rotation)),
-            position.getY() + 0 * Math.sin(Math.toRadians(rotation))
+            position.getX() + 12 * Math.cos(Math.toRadians(rotation)),
+            position.getY() + 12 * Math.sin(Math.toRadians(rotation))
         );
         
         Bullet bullet = new Bullet(bulletStart, angle, bulletSpeed);
