@@ -7,11 +7,11 @@ import java.util.Random;
 
 public class AsteroidField implements Updatable, Drawable{
 
-	private static double spawningMultiplier = 5;
+	private static double spawningMultiplier = 1.1;
 	private ArrayList<Asteroid> asteroids;
 	Random random = new Random();
 	private Asteroids gameReference;
-	private ArrayList<Polygon> delete = new ArrayList<Polygon>();
+	private ArrayList<Asteroid> delete = new ArrayList<Asteroid>();
 	
 	Point[][] shapes = {{
 		new Point(9, -8),
@@ -48,26 +48,30 @@ public class AsteroidField implements Updatable, Drawable{
 		new Point(-6, -1),
 		new Point(-10, -5),
 		new Point(-2, -9)
-
-
 	}};
 
 	
 	public AsteroidField(Asteroids game) {
 		this.gameReference = game;
 		asteroids = new ArrayList<Asteroid>();
-		
 	}
 	
-	public void splitAsteroid(Point p) {
-		Asteroid a = new Asteroid(shapes[random.nextInt(3)], p, random.nextDouble(360), 2, 1);
-		asteroids.add(a);
-		a.position = Utilities.updatePosition(a.position, a.rotation, 15);
-		
-		
+	public void splitAsteroid(Point p, double scale) {
+	    double newScale = scale * 0.65; 
+	    if (newScale > 2.5) {
+	        for (int i = 0; i < 2; i++) {
+	            Asteroid a = new Asteroid(
+	                shapes[random.nextInt(3)], 
+	                p.clone(), 
+	                random.nextDouble() * 360, 
+	                2.1, 
+	                newScale
+	            );
+	            asteroids.add(a);
+	            a.position = Utilities.updatePosition(a.position, a.rotation + (i * 180), 15);
+	        }
+	    }
 	}
-	
-	
 	
 	public class Asteroid extends Polygon implements Updatable, Drawable{
 
@@ -82,10 +86,8 @@ public class AsteroidField implements Updatable, Drawable{
 
 		@Override
 		public void update() {
-			
 			position = Utilities.updatePosition(position, rotation, velocity);
 			Utilities.wrapAround(position);
-			
 		}
 
 		@Override
@@ -94,26 +96,36 @@ public class AsteroidField implements Updatable, Drawable{
 		}
 	}
 
-
-
 	@Override
 	public void update() {
-		if(Math.random()*100 < spawningMultiplier) {
-			System.out.println(random.nextInt(3));
-			Asteroid a = new Asteroid(
-					shapes[random.nextInt(3)], 
-					new Point(random.nextInt(500), random.nextInt(500)),
-					(double)(random.nextInt(360)), 
-					1.0, (Math.random()*3)+2);
-			this.asteroids.add(a);
-			System.out.println("asteroid");
-		}
-		
-		for(Asteroid a: asteroids) {
-			a.update();
-		}
-		collidingAsteroids();
-		
+	    if(Math.random()*100 < spawningMultiplier) {
+	        Point spawnPoint = getEdgeSpawnPoint();
+	        Asteroid a = new Asteroid(
+	                shapes[random.nextInt(3)], 
+	                spawnPoint,
+	                (double)(random.nextInt(360)), 
+	                1.0, 
+	                (Math.random()*2)+2.5);
+	        this.asteroids.add(a);
+	    }
+	    
+	    for(Asteroid a: asteroids) {
+	        a.update();
+	    }
+	}
+	
+	private Point getEdgeSpawnPoint() {
+	    int edge = random.nextInt(4); 
+	    
+	    if (edge == 0) {
+	        return new Point(random.nextInt(Asteroids.width), -20);
+	    } else if (edge == 1) {
+	        return new Point(Asteroids.width + 20, random.nextInt(Asteroids.height));
+	    } else if (edge == 2) {
+	        return new Point(random.nextInt(Asteroids.width), Asteroids.height + 20);
+	    } else {
+	        return new Point(-20, random.nextInt(Asteroids.height));
+	    }
 	}
 
 	@Override
@@ -122,41 +134,48 @@ public class AsteroidField implements Updatable, Drawable{
 		for(Asteroid a: asteroids) {
 			a.draw(brush);
 		}
-		
 	}
 	
-	public void collidingAsteroids() {
-		for(Polygon p: asteroids) {
-			if(isCollidingAsteroid(p)) {
-				delete.add(p);
+	public void checkBulletCollisions(Ship ship) {
+		for (Bullet bullet : ship.getBullets()) {
+			for (Asteroid asteroid : asteroids) {
+				if (asteroid.contains(bullet.getPosition())) {
+					delete.add(asteroid);
+					bullet.update();
+					for (int i = 0; i < 60; i++) {
+						bullet.update();
+					}
+					gameReference.newExplosion(asteroid.position);
+					break;
+				}
 			}
 		}
 		cleanup();
 	}
 	
-	public boolean isCollidingAsteroid(Polygon thing) {
-		for(Polygon a: asteroids) {
-			if(a==thing){continue;}
-			if(Utilities.isColliding(a, thing)){
-				gameReference.newExplosion(Utilities.averagePosition(a, thing));
-				delete.add(a);
-				return true;
+	public boolean checkShipCollision(Ship ship) {
+		for (Asteroid asteroid : asteroids) {
+			Point[] shipPoints = ship.getPoints();
+			for (Point p : shipPoints) {
+				if (asteroid.contains(p)) {
+					return true;
+				}
 			}
-				
-		
 		}
 		return false;
 	}
 	
 	private void cleanup() {
-		for(Polygon p: delete) {
-			asteroids.remove(p);
-			if(((Asteroid)p).scale > 1.5) {
-			splitAsteroid(p.position);
-			splitAsteroid(p.position);
-			}
+		for(Asteroid a: delete) {
+			double scale = a.scale;
+			Point position = a.position.clone();
+			asteroids.remove(a);
+			splitAsteroid(position, scale);
 		}
 		delete.clear();
 	}
 	
+	public int getAsteroidCount() {
+		return asteroids.size();
+	}
 }
