@@ -20,8 +20,8 @@ public class Explosion implements Updatable, Drawable{
     private ArrayList<ExplosionParticle> particles;
     
     /**
-     * Constructor for a new Explosion at the specified coordinates.
-     * Creates multiple particles that radiate outward in all directions.
+     * Constructor for a new Explosion at given coordinates.
+     * Creates multiple particles that go outward in all directions.
      * 
      * @param x the x-coordinate of the explosion center
      * @param y the y-coordinate of the explosion center
