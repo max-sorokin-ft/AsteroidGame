@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * This class represents a player-controlled spaceship in our Asteroids game.
- * The ship can move forward, rotate left/right, and shoot bullets.
+ * The ship can move forward, rotate left/right, and shoot bullet.
  * Uses momentum-based physics with friction for realistic and easy-to-use movement.
  */
 public class Ship extends Polygon implements Updatable, Drawable {
@@ -19,7 +19,7 @@ public class Ship extends Polygon implements Updatable, Drawable {
     private double maxSpeed;
     private double rotationSpeed;
     
-    private boolean thrustingForward;
+    private boolean movingForward;
     private boolean rotatingLeft;
     private boolean rotatingRight;
     private boolean shooting;
@@ -50,7 +50,7 @@ public class Ship extends Polygon implements Updatable, Drawable {
         friction = 0.98;
         maxSpeed = 5;
         rotationSpeed = 5;
-        thrustingForward = false;
+        movingForward = false;
         rotatingLeft = false;
         rotatingRight = false;
         shooting = false;
@@ -70,7 +70,7 @@ public class Ship extends Polygon implements Updatable, Drawable {
         if (rotatingRight) {
             rotation += rotationSpeed;
         }
-        if (thrustingForward) {
+        if (movingForward) {
             double angle = rotation - 90;
             velocityX += acceleration * Math.cos(Math.toRadians(angle));
             velocityY += acceleration * Math.sin(Math.toRadians(angle));
@@ -148,13 +148,13 @@ public class Ship extends Polygon implements Updatable, Drawable {
     }
     
     /**
-     * Handles key press events for basic ship controls.
+     * Handles key click events for ship controls.
      * 
      * @param e the KeyEvent
      */
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            thrustingForward = true;
+            movingForward = true;
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             rotatingLeft = true;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -171,7 +171,7 @@ public class Ship extends Polygon implements Updatable, Drawable {
      */
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
-            thrustingForward = false;
+            movingForward = false;
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             rotatingLeft = false;
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
