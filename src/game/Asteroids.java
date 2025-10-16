@@ -39,18 +39,14 @@ class Asteroids extends Game {
         ship = new Ship(new Point(width / 2, height / 2));
         explosions = new ArrayList<Explosion>();
         
+        // Make the Ship a KeyListener for keyboard input
+        this.addKeyListener(ship);
+        
+        // Anonymous class that handles game level controls(like restart)
         this.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (gameOver && e.getKeyCode() == KeyEvent.VK_R) {
                     resetGame();
-                } else if (!gameOver) {
-                    ship.keyPressed(e);
-                }
-            }
-            
-            public void keyReleased(KeyEvent e) {
-                if (!gameOver) {
-                    ship.keyReleased(e);
                 }
             }
         });
@@ -59,7 +55,7 @@ class Asteroids extends Game {
     /**
      * Main method to start the game.
      * 
-     * @param args default java arguments
+     * @param args default main java arguments
      */
     public static void main(String[] args) {
         Asteroids a = new Asteroids();
@@ -67,7 +63,7 @@ class Asteroids extends Game {
     }
     
     /**
-     * Main game loop. Updates and draws all game objects.
+     * Main game loop. Updates and draws all objects.
      * Handles collisions, score display, etc.
      * 
      * @param brush the Graphics object for drawing
@@ -115,6 +111,7 @@ class Asteroids extends Game {
      * @param brush the Graphics object for drawing
      */
     private void explosionUpdates(Graphics brush) {
+        // Lambda expression that uses removeIf to filter expired explosions
         explosions.removeIf(e -> e.getDeathFrame() < frame);
         
         for (Explosion e : explosions) {
