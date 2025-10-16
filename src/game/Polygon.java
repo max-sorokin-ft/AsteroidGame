@@ -74,6 +74,10 @@ class Polygon {
     return crossingNumber%2 == 1;
   }
   
+  /**
+   * Draws the polygon to the screen by connecting its points with lines.
+   * @param brush the Graphics object used for drawing
+   */
   public void drawPolygon(Graphics brush) {
 	  for(int i = 0; i < shape.length-1; i++) {
 		 brush.drawLine(
