@@ -39,7 +39,6 @@ class Asteroids extends Game {
         ship = new Ship(new Point(width / 2, height / 2));
         explosions = new ArrayList<Explosion>();
         
-        // Make the Ship a KeyListener for keyboard input
         this.addKeyListener(ship);
         
         // Anonymous class that handles game level controls(like restart)
