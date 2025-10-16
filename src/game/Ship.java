@@ -99,9 +99,9 @@ public class Ship extends Polygon implements Updatable, Drawable, KeyListener {
             shootCooldown--;
         }
         
-        // REQUIREMENT: Lambda expression - Using forEach with lambda to update all bullets
+        // Lambda expression that uses forEach to update bullets
         bullets.forEach(bullet -> bullet.update());
-        // REQUIREMENT: Lambda expression - Using removeIf with lambda to remove dead bullets
+        // Lambda expression that uses removeIf to remove dead/inactive. bullets
         bullets.removeIf(bullet -> bullet.isDead());
     }
     
