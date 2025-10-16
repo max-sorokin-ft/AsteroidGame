@@ -47,6 +47,17 @@ abstract class Game extends Canvas {
     try {Thread.sleep(time);} catch(Exception exc){};
   }
   
+  /**
+   * Returns the width of the game.
+   * 
+   * @return the width in pixels
+   */
   public int getWidth() {return width;}
+  
+  /**
+   * Returns the height of the game.
+   * 
+   * @return the height in pixels
+   */
   public int getHeight() {return height;}
 }
