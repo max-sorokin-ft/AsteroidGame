@@ -1,14 +1,14 @@
 package game;
 
 /**
- * The Utilities class provides helper methods for game physics and geometry.
- * Contains static methods for position updates, point transformations,
+ * This Utilities class provides helper methods for game physics and geometry.
+ * It contains static methods for utilities such as position updates, point transformations,
  * collision detection, and screen wrapping.
  */
 public class Utilities {
 
     /**
-     * Updates a position by adding velocity components.
+     * Updates the position by adding velocity components.
      * 
      * @param position the current position
      * @param velX the horizontal velocity
@@ -23,8 +23,8 @@ public class Utilities {
     }
     
     /**
-     * Updates a position based on angle and velocity.
-     * Uses math to calculate movement in a specific direction.
+     * Updates the position based on angle and velocity.
+     * Uses math/trig to calculate movement in a specific direction.
      * 
      * @param position the current position
      * @param angle the direction of movement in degrees
@@ -72,7 +72,7 @@ public class Utilities {
     
     /**
      * Wraps a point around the screen edges.
-     * When an object(spaceship, asteroid) moves off one edge, it reappears on the opposite edge.
+     * When an object(spaceship, asteroid) moves off one edge, it re-appears on the opposite edge.
      * 
      * @param p the point to wrap
      */
