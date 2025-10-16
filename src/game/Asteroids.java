@@ -137,7 +137,7 @@ class Asteroids extends Game {
     
     /**
      * Resets the game.
-     * Restores lives, clears score, and recreates all game objects.
+     * And its other aspects like lives, score, etc.
      */
     private void resetGame() {
         gameOver = false;
