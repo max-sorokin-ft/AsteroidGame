@@ -3,6 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 /**
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * The ship can move forward, rotate left/right, and shoot bullet.
  * Uses momentum-based physics with friction for realistic and easy-to-use movement.
  */
-public class Ship extends Polygon implements Updatable, Drawable {
+public class Ship extends Polygon implements Updatable, Drawable, KeyListener {
     
     private double velocityX;
     private double velocityY;
@@ -98,13 +99,14 @@ public class Ship extends Polygon implements Updatable, Drawable {
             shootCooldown--;
         }
         
+        // REQUIREMENT: Lambda expression - Using forEach with lambda to update all bullets
         bullets.forEach(bullet -> bullet.update());
+        // REQUIREMENT: Lambda expression - Using removeIf with lambda to remove dead bullets
         bullets.removeIf(bullet -> bullet.isDead());
     }
     
     /**
      * Draws the ship and its bullets to the screen.
-     * 
      * @param brush the Graphics object used for drawing
      */
     @Override
@@ -148,10 +150,10 @@ public class Ship extends Polygon implements Updatable, Drawable {
     }
     
     /**
-     * Handles key click events for ship controls.
-     * 
+     * Handles key press events for ship controls.
      * @param e the KeyEvent
      */
+    @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             movingForward = true;
@@ -166,9 +168,9 @@ public class Ship extends Polygon implements Updatable, Drawable {
     
     /**
      * Handles key release events for ship controls.
-     * 
      * @param e the KeyEvent
      */
+    @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_UP) {
             movingForward = false;
@@ -182,7 +184,14 @@ public class Ship extends Polygon implements Updatable, Drawable {
     }
     
     /**
-     * Returns the list of bullets fired by this ship(can fire whilst others are acive).
+     * Required by KeyListener interface - left empty as per assignment instructions.
+     * @param e the KeyEvent
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    
+    /**
+     * Returns the list of bullets fired by this ship(can fire whilst others are active).
      * 
      * @return ArrayList of Bullet objects
      */
